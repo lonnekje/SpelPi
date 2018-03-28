@@ -11,25 +11,28 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = SpelPiv1
 TEMPLATE = app
 
+INCLUDEPATH +=  /home/lonneke/sysroot/usr/include \
+                /home/lonneke/sysroot/usr/include/arm-linux-gnueabihf/
+#                /home/lonneke/sysroot/usr/lib
+
+
+LIBS += -L/home/lonneke/sysroot/usr/lib -lwiringPi \
+
 
 SOURCES += main.cpp\
         mainwindow.cpp \
     motorcontroller.cpp \
     gpioclass.cpp \
-    ../rpiPWM1/rpiPWM1.cpp \
     camerahandler.cpp \
     gamehandler.cpp
 
 HEADERS  += mainwindow.h \
     motorcontroller.h \
     gpioclass.h \
-    ../rpiPWM1/rpiPWM1.h \
     camerahandler.h \
     gamehandler.h
 
 FORMS    += mainwindow.ui
-
-LIBS += -L/home/lonneke/sysroot/usr/lib \
 
 
 

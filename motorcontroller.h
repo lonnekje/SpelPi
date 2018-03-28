@@ -4,6 +4,12 @@
 #include <QMainWindow>
 #include <QWidget>
 #include "mainwindow.h"
+#include <softPwm.h>
+//#include "/home/lonneke/sysroot/usr/include/wiringPi.h"
+
+extern "C"{
+#include <wiringPi.h>
+}
 
 using namespace std;
 
@@ -14,17 +20,18 @@ public:
     explicit MotorController(QWidget *parent = 0);
     void CurrentPos();
     void SetPos(int x,int y, int z);
-
-
-signals:
-
-public slots:
-    bool Switch;
     void run();
+    void myInterrupt();
+
+
+//public slots:
+    bool Switch;
+
 
 
 private:
-    bool switch1 = true;
+   // bool switch1 = true;
+    int i;
     int x;
     int y;
     int z;

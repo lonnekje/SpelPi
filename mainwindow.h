@@ -16,6 +16,10 @@ namespace Ui {
 class MainWindow;
 }
 
+class MotorController;
+class CameraHandler;
+class GameHandler;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -23,10 +27,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
 
-    void StartSlot();
-    void SwitchSlot();
 
-    void virtual run()=0;
 
     MotorController *MotorThread;
     CameraHandler *CamThread;
@@ -41,7 +42,10 @@ public:
 private slots:
     void on_pushButton_clicked();
 
-    void on_pushButton_2_clicked();
+    //void on_pushButton_2_clicked();
+    void StartSlot();
+    void SwitchSlot();
+
 
 private:
     Ui::MainWindow *ui;

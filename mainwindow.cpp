@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     Startbut->move(50,80);
     connect(Startbut, SIGNAL(clicked(bool)), this, SLOT(StartSlot()));
 
-    QPushButton *Switchbut = new QPushButton("Digital Switch", this);
-    Switchbut->move(80,80);
+    QPushButton *Switchbut = new QPushButton("Switch", this);
+    Switchbut->move(50,120);
     connect(Switchbut, SIGNAL(clicked(bool)), this, SLOT(SwitchSlot()));
 
     //setup threads
@@ -40,12 +40,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::StartSlot(){
     cout << "Start button pressed." << endl;
+    setenv("WIRINGPI_GPIOMEM", "1", 1);
+
+    MotorThread->run();
 }
 
 void MainWindow::SwitchSlot(){
     cout << "Switch pressed."<< endl;
     MotorThread->Switch = true;
-    MotorThread->run();
 }
 
 /*void Mainwindow::QuitSlot(){
