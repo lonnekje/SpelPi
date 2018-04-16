@@ -17,6 +17,7 @@ INCLUDEPATH +=  /home/lonneke/sysroot/usr/include \
 
 
 LIBS += -L/home/lonneke/sysroot/usr/lib -lwiringPi \
+                                        -lpigpio \
 
 
 SOURCES += main.cpp\
@@ -24,13 +25,15 @@ SOURCES += main.cpp\
     motorcontroller.cpp \
     gpioclass.cpp \
     camerahandler.cpp \
-    gamehandler.cpp
+    gamehandler.cpp \
+    ../Hough-Circle-Detector/src/hcd.cpp
 
 HEADERS  += mainwindow.h \
     motorcontroller.h \
     gpioclass.h \
     camerahandler.h \
-    gamehandler.h
+    gamehandler.h \
+    ../Hough-Circle-Detector/src/hcd.h
 
 FORMS    += mainwindow.ui
 

@@ -19,13 +19,21 @@ MainWindow::MainWindow(QWidget *parent) :
     Quitbut->move(10,80);
     connect(Quitbut, SIGNAL(clicked(bool)), this, SLOT(QuitSlot()));*/
 
-    QPushButton *Startbut = new QPushButton("Start", this);
+    QPushButton *Startbut = new QPushButton("<", this);
     Startbut->move(50,80);
     connect(Startbut, SIGNAL(clicked(bool)), this, SLOT(StartSlot()));
+
+    QPushButton *Voorbut = new QPushButton(">", this);
+    Voorbut->move(250,80);
+    connect(Voorbut, SIGNAL(clicked(bool)), this, SLOT(VoorSlot()));
 
     QPushButton *Switchbut = new QPushButton("Switch", this);
     Switchbut->move(50,120);
     connect(Switchbut, SIGNAL(clicked(bool)), this, SLOT(SwitchSlot()));
+
+    QPushButton *AFSbut = new QPushButton("afstand", this);
+    AFSbut->move(250,120);
+    connect(AFSbut, SIGNAL(clicked(bool)), this, SLOT(AFSSlot()));
 
     //setup threads
 
@@ -41,13 +49,27 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::StartSlot(){
     cout << "Start button pressed." << endl;
     setenv("WIRINGPI_GPIOMEM", "1", 1);
+    MotorThread->Init();
+    MotorThread->run(dir=0);
+}
 
-    MotorThread->run();
+void MainWindow::VoorSlot(){
+    cout << "Voor button pressed." << endl;
+    setenv("WIRINGPI_GPIOMEM", "1", 1);
+    MotorThread->Init();
+    MotorThread->run(dir=1);
 }
 
 void MainWindow::SwitchSlot(){
     cout << "Switch pressed."<< endl;
-    MotorThread->Switch = true;
+    MotorThread->Init();
+    MotorThread->stop();
+}
+
+void MainWindow::AFSSlot(){
+    cout << "Switch pressed."<< endl;
+    MotorThread->Init();
+    MotorThread->afs();
 }
 
 /*void Mainwindow::QuitSlot(){
