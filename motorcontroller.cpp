@@ -7,7 +7,10 @@ MotorController::MotorController(QWidget *parent) : QMainWindow(parent)
 
 void MotorController::stop(){
     cout << "Stop loop" << endl;
-    gpioPWM(GPIO26, 0);
+    gpioPWM(STEP1, 0);
+    gpioPWM(STEP2, 0);
+
+
 }
 
 void MotorController::myInterrupt(int gpio, int level, uint32_t tick){
@@ -41,15 +44,24 @@ void MotorController::Init(){
         gpioSetMode(MODE2, PI_OUTPUT);
         gpioWrite(MODE2, PI_LOW);
 
+        //Stepper2
+
+        gpioSetMode(DIR2, PI_OUTPUT);
+        gpioWrite(DIR2, PI_LOW);
+        gpioSetMode(STEP2, PI_OUTPUT);
+        gpioWrite(STEP2, PI_LOW);
+        gpioSetPWMfrequency(STEP2, 2000);
+
         //Stepper1
 
-        gpioSetMode(GPIO19, PI_OUTPUT);
-        gpioWrite(GPIO19, PI_LOW);
-        gpioSetMode(GPIO26, PI_OUTPUT);
-        gpioWrite(GPIO26, PI_LOW);
-        gpioSetPWMfrequency(GPIO26, 2000);
+        gpioSetMode(DIR1, PI_OUTPUT);
+        gpioWrite(DIR1, PI_LOW);
+        gpioSetMode(STEP1, PI_OUTPUT);
+        gpioWrite(STEP1, PI_LOW);
+        gpioSetPWMfrequency(STEP1, 2000);
 
-        //SW1
+
+         //SW1
         gpioSetMode(SWITCH1, PI_INPUT);
         gpioWrite(SWITCH1, PI_LOW);
         gpioSetPullUpDown(SWITCH1, PI_PUD_UP );
@@ -61,8 +73,22 @@ void MotorController::Init(){
         gpioSetPullUpDown(SWITCH2, PI_PUD_UP );
         gpioSetISRFunc(SWITCH2, FALLING_EDGE, 200, myInterrupt);
 
+        //SW3
+        gpioSetMode(SWITCH3, PI_INPUT);
+        gpioWrite(SWITCH3, PI_LOW);
+        gpioSetPullUpDown(SWITCH3, PI_PUD_UP );
+        gpioSetISRFunc(SWITCH3, FALLING_EDGE, 200, myInterrupt);
+
+        //SW4
+        gpioSetMode(SWITCH4, PI_INPUT);
+        gpioWrite(SWITCH4, PI_LOW);
+        gpioSetPullUpDown(SWITCH4, PI_PUD_UP );
+        gpioSetISRFunc(SWITCH4, FALLING_EDGE, 200, myInterrupt);
+
 
         firstTime = false;
+
+
     }
 }
 
@@ -71,32 +97,64 @@ void MotorController::run(bool dir){
     cout << "Checking Dir: "<< dir << endl;
 
     if(dir==1){
-        gpioWrite(GPIO19, PI_HIGH);
-        cout<<"writing 19 high"<<endl;
+        gpioWrite(DIR2, PI_LOW);
+        cout<<"writing DIR2 high"<<endl;
     }
     else{
-        gpioWrite(GPIO19, PI_LOW);
-        cout<<"writing 19 low"<<endl;
+        gpioWrite(DIR2, PI_HIGH);
+        cout<<"writing DIR2 low"<<endl;
     }
 
-    gpioPWM(GPIO26, 50);
+    gpioPWM(STEP2, 50);
+
+}
+
+void MotorController::runup(bool dir){
+
+
+    gpioSetMode(21, PI_INPUT);
+    gpioWrite(21, PI_LOW);
+
+    cout << "Checking Dir runup: "<< dir << endl;
+
+    if(dir==1){
+        gpioWrite(DIR1, PI_LOW);
+        cout<<"writing 20 high"<<endl;
+    }
+    else{
+        gpioWrite(DIR1, PI_HIGH);
+        cout<<"writing 20 low"<<endl;
+    }
+
+    gpioPWM(STEP1, 50);
 
 }
 
 void MotorController::afs(){
 
-    gpioWrite(GPIO19, PI_HIGH);
-    gpioPWM(GPIO26, 50);
+    gpioWrite(DIR1, PI_LOW);
+    gpioPWM(STEP2, 50);
     sleep(2);
-    gpioPWM(GPIO26, 0);
+    gpioPWM(STEP2, 0);
 
     //gpioTick
 
 }
 
+void MotorController::Servo(int hoog){
+    cout << "Servo " << endl;
+    gpioPWM(SERVO, hoog);
+    gpioPWM(SERVO, 0);
+
+}
+
+void MotorController::HomeX(){
+    cout << "Going Home X " << endl;
+
+}
 
 
+void MotorController::HomeY(){
+    cout << "Going Home Y" << endl;
 
-
-
-
+}

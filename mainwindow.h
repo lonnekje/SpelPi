@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPixmap>
 #include <iostream>
 #include <unistd.h>
 #include <errno.h>
@@ -11,6 +12,9 @@
 #include "motorcontroller.h"
 #include "gamehandler.h"
 #include "camerahandler.h"
+
+
+
 
 namespace Ui {
 class MainWindow;
@@ -24,7 +28,9 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+
 public:
+    //using QWidget::QObject;
     explicit MainWindow(QWidget *parent = 0);
 
 
@@ -37,7 +43,8 @@ public:
 
 
     ~MainWindow();
-
+public slots:
+    void onValueChanged(int, QImage);
 
 private slots:
     void on_pushButton_clicked();
@@ -47,11 +54,22 @@ private slots:
     void SwitchSlot();
     void VoorSlot();
     void AFSSlot();
+    void CamSlot();
+    void highSlot();
+    void lowSlot();
+    void ServoSlot();
+    void Servo2Slot();
+
+    //void showImg(QImage editmejn);
 
 
 private:
     Ui::MainWindow *ui;
     bool dir;
+    int pin;
+    bool succes;
+    int hoog;
+    //QPixmap img;
 };
 
 #endif // MAINWINDOW_H

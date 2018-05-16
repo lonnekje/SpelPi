@@ -13,12 +13,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+
+
+
+    QPixmap mejn (":/mejn1.jpg");
+    ui->Label_picture->setPixmap(mejn);
+
+    //QPixmap editmejn(mejn);
+   // ui->Edit_Label->setPixmap(editmejn);
+
     //setup buttons
-
-    /*QPushButton *Quitbut = new QPushButton("Quit", this);
-    Quitbut->move(10,80);
-    connect(Quitbut, SIGNAL(clicked(bool)), this, SLOT(QuitSlot()));*/
-
     QPushButton *Startbut = new QPushButton("<", this);
     Startbut->move(50,80);
     connect(Startbut, SIGNAL(clicked(bool)), this, SLOT(StartSlot()));
@@ -27,13 +31,33 @@ MainWindow::MainWindow(QWidget *parent) :
     Voorbut->move(250,80);
     connect(Voorbut, SIGNAL(clicked(bool)), this, SLOT(VoorSlot()));
 
+    QPushButton *highbut = new QPushButton("^", this);
+    highbut->move(50,120);
+    connect(highbut, SIGNAL(clicked(bool)), this, SLOT(highSlot()));
+
+    QPushButton *lowbut = new QPushButton("v", this);
+    lowbut->move(250,120);
+    connect(lowbut, SIGNAL(clicked(bool)), this, SLOT(lowSlot()));
+
     QPushButton *Switchbut = new QPushButton("Switch", this);
-    Switchbut->move(50,120);
+    Switchbut->move(50,160);
     connect(Switchbut, SIGNAL(clicked(bool)), this, SLOT(SwitchSlot()));
 
     QPushButton *AFSbut = new QPushButton("afstand", this);
-    AFSbut->move(250,120);
+    AFSbut->move(250,160);
     connect(AFSbut, SIGNAL(clicked(bool)), this, SLOT(AFSSlot()));
+
+    QPushButton *Cambut = new QPushButton("Cam", this);
+    Cambut->move(50,200);
+    connect(Cambut, SIGNAL(clicked(bool)), this, SLOT(CamSlot()));
+
+    QPushButton *Servobut = new QPushButton("Servo", this);
+    Servobut->move(250,200);
+    connect(Servobut, SIGNAL(clicked(bool)), this, SLOT(ServoSlot()));
+
+    QPushButton *Servo2but = new QPushButton("Servo", this);
+    Servo2but->move(50,240);
+    connect(Servo2but, SIGNAL(clicked(bool)), this, SLOT(Servo2Slot()));
 
     //setup threads
 
@@ -41,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
     CamThread = new CameraHandler();
     GameThread = new GameHandler();
 
-
+    connect(CamThread, SIGNAL(valueChanged(int, QImage)), this, SLOT(onValueChanged(int, QImage)));
 
 
 }
@@ -50,14 +74,28 @@ void MainWindow::StartSlot(){
     cout << "Start button pressed." << endl;
     setenv("WIRINGPI_GPIOMEM", "1", 1);
     MotorThread->Init();
-    MotorThread->run(dir=0);
+    MotorThread->run(dir=1);
 }
 
 void MainWindow::VoorSlot(){
     cout << "Voor button pressed." << endl;
     setenv("WIRINGPI_GPIOMEM", "1", 1);
     MotorThread->Init();
-    MotorThread->run(dir=1);
+    MotorThread->run(dir=0);
+}
+
+void MainWindow::highSlot(){
+    cout << "Start button pressed." << endl;
+    setenv("WIRINGPI_GPIOMEM", "1", 1);
+    MotorThread->Init();
+    MotorThread->runup(dir=0);
+}
+
+void MainWindow::lowSlot(){
+    cout << "Voor button pressed." << endl;
+    setenv("WIRINGPI_GPIOMEM", "1", 1);
+    MotorThread->Init();
+    MotorThread->runup( dir=1);
 }
 
 void MainWindow::SwitchSlot(){
@@ -72,110 +110,38 @@ void MainWindow::AFSSlot(){
     MotorThread->afs();
 }
 
-/*void Mainwindow::QuitSlot(){
-    cout << "Quit button pressed." << endl;
-}*/
+void MainWindow::CamSlot(){
+    cout << "Cam."<< endl;
+    CamThread->FindCircle();
+}
+
+void MainWindow::ServoSlot(){
+    cout << "Servo"<< endl;
+    MotorThread->Init();
+    MotorThread->Servo(hoog=180);
+}
+
+void MainWindow::Servo2Slot(){
+    cout << "Servo"<< endl;
+    MotorThread->Init();
+    MotorThread->Servo(hoog=80);
+}
+
+void MainWindow::onValueChanged(int count, QImage img){
+    ui->Textlabel->setText(QString::number(count));
+    ui->Edit_Label->setPixmap(QPixmap::fromImage(img));
+}
 
 
 MainWindow::~MainWindow()
 {
     delete ui;
+
 }
 
 void MainWindow::on_pushButton_clicked()
 {
 
 }
-/*
-void MainWindow::on_pushButton_2_clicked()
-{
-       string inputstate;
-
-
-       //wiringPiSetup();
-
-       //create new GPIO object to be attached to  GPIO
-       GPIOClass* gpio14 = new GPIOClass("14");
-       GPIOClass* gpio15 = new GPIOClass("15");
-       GPIOClass* gpio18 = new GPIOClass("18");
-       GPIOClass* gpio19 = new GPIOClass("19");
-       GPIOClass* gpio26 = new GPIOClass("26");
-
-       gpio14->export_gpio();
-       gpio15->export_gpio();
-       gpio18->export_gpio();
-       gpio19->export_gpio();
-       gpio26->export_gpio();
-
-       cout << " GPIO pins exported" << endl;
-
-       gpio14->setdir_gpio("out");
-       gpio15->setdir_gpio("out");
-       gpio18->setdir_gpio("out");
-       gpio19->setdir_gpio("out");
-       gpio26->setdir_gpio("out");
-
-
-       cout << " Set GPIO pin directions" << endl;
-
-       //set microstep resolution
-       gpio14->setval_gpio("1");
-       gpio15->setval_gpio("0");
-       gpio18->setval_gpio("1");
-
-       gpio19->setval_gpio("0");
-
-        cout << "Set Microsteps" << endl;
-
-        for(int i=0; i<50; i++){
-        gpio26->setval_gpio("1");
-
-        cout << "1e is: " << i << endl;
-
-        sleep(1);
-        }
-
-        for(int i=0; i<50;i++)
-        {
-        gpio19->setval_gpio("1");
-        cout << "2e is: " << i << endl;
-        sleep(1);
-        }
-
-        cout << "klaar"  << endl;
-
-}*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
