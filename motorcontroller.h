@@ -43,8 +43,10 @@ public:
     void Servo(int hoog);
     void HomeX();
     void HomeY();
+    void Home();
 
     bool Switch;
+    static bool stopmotor;
 
 private:
    // bool switch1 = true;

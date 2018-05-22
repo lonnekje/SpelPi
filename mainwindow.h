@@ -59,6 +59,7 @@ private slots:
     void lowSlot();
     void ServoSlot();
     void Servo2Slot();
+    void HomeSlot();
 
     //void showImg(QImage editmejn);
 

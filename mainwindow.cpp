@@ -59,6 +59,10 @@ MainWindow::MainWindow(QWidget *parent) :
     Servo2but->move(50,240);
     connect(Servo2but, SIGNAL(clicked(bool)), this, SLOT(Servo2Slot()));
 
+    QPushButton *Homebut = new QPushButton("Home", this);
+    Homebut->move(250,240);
+    connect(Homebut, SIGNAL(clicked(bool)), this, SLOT(HomeSlot()));
+
     //setup threads
 
     MotorThread = new MotorController();
@@ -115,7 +119,7 @@ void MainWindow::CamSlot(){
     CamThread->FindCircle();
 }
 
-void MainWindow::ServoSlot(){
+/*void MainWindow::ServoSlot(){
     cout << "Servo"<< endl;
     MotorThread->Init();
     MotorThread->Servo(hoog=180);
@@ -125,6 +129,12 @@ void MainWindow::Servo2Slot(){
     cout << "Servo"<< endl;
     MotorThread->Init();
     MotorThread->Servo(hoog=80);
+}*/
+
+void MainWindow::HomeSlot(){
+    cout << "Home"<< endl;
+    MotorThread->Init();
+    MotorThread->Home();
 }
 
 void MainWindow::onValueChanged(int count, QImage img){
