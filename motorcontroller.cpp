@@ -9,17 +9,19 @@ void MotorController::stop(){
     cout << "Stop loop" << endl;
     gpioPWM(STEP1, 0);
     gpioPWM(STEP2, 0);
+}
 
-
-
+void MotorController::Change(){
+    stopmotor = true;
 }
 
 void MotorController::myInterrupt(int gpio, int level, uint32_t tick){
     switch(level){
     case 1:
         cout << "GPIO " << gpio << " became: " << level << " at tick: "<< tick << endl;
+        MotorController mc;
         stop();
-        MotorController::stopmotor = true;
+        mc.Change();
         cout << "interrupt loop, interrupt handled" << endl;
         break;
     }
@@ -89,7 +91,7 @@ void MotorController::Init(){
 
 
         firstTime = false;
-        MotorController::stopmotor = false;
+        //bool MotorController::stopmotor = false;
 
 
     }
@@ -158,11 +160,15 @@ void MotorController::afs(){
 }
 */
 void MotorController::Home(){
-    MotorController mc;
-    mc.HomeX();
-    if(MotorController::stopmotor ==true){
-        mc.HomeY();
+
+    /*HomeX();
+
+
+    while(stopmotor ==false){
+
     }
+    cout << "After while " << endl;
+    HomeY();*/
 }
 
 void MotorController::HomeX(){

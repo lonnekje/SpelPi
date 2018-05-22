@@ -44,9 +44,10 @@ public:
     void HomeX();
     void HomeY();
     void Home();
+    void Change();
 
     bool Switch;
-    static bool stopmotor;
+    bool stopmotor=false;
 
 private:
    // bool switch1 = true;
