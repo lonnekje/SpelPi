@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QWidget>
 #include "mainwindow.h"
+#include "point.h"
 
 
 #include <pigpio.h>
@@ -45,6 +46,7 @@ public:
     void HomeY();
     void Home();
     void Change();
+    void Move(int x, int y);
 
     bool Switch;
     bool stopmotor=false;
@@ -58,6 +60,9 @@ private:
     int MaxStepX = 200;
     int MaxStepY = 200;
     bool firstTime = true;
+    int tempx, tempy;
+    int lastx = 0;
+    int lasty = 0;
 
 
 

@@ -92,9 +92,48 @@ void MotorController::Init(){
 
         firstTime = false;
         //bool MotorController::stopmotor = false;
-
-
+      /*  Point last;
+        last.setLastLocation(last.lastx=0, last.lasty=0);*/
     }
+}
+
+void MotorController::Move(int x, int y){
+
+cout<<"Start move" << x << y <<endl;
+
+    tempx = x - lastx;
+    tempy = y - lasty;
+
+cout<<"Temp xy" << tempx << tempy <<endl;
+
+    if(tempx<0){
+        gpioWrite(DIR2, PI_LOW);
+        tempx = tempx * -1;
+    }
+    else{ gpioWrite(DIR2, PI_HIGH);}
+
+    tempx = tempx/2;
+
+    gpioPWM(STEP2, 50);
+    sleep(tempx);
+    gpioPWM(STEP2, 0);
+
+    if(tempy<0){
+        gpioWrite(DIR1, PI_LOW);
+        tempy = tempy * -1;
+    }
+    else{ gpioWrite(DIR1, PI_HIGH);}
+
+    tempy = tempy/2;
+
+    gpioPWM(STEP1, 50);
+    sleep(tempy);
+    gpioPWM(STEP1, 0);
+
+
+
+    lastx = x;
+    lasty = y;
 }
 
 void MotorController::run(bool dir){

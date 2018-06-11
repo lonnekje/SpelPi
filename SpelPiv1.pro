@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,6 +26,7 @@ INCLUDEPATH +=  /home/lonneke/sysroot/usr/include \
 
 LIBS += -L/home/lonneke/sysroot/usr/lib -lwiringPi \
                                         -lpigpio \
+
         -L/home/lonneke/sysroot/usr/opencv  #-lopencv_imgproc\
                                             #-lopencv_highgui\
 
@@ -37,6 +39,7 @@ SOURCES += main.cpp\
     camerahandler.cpp \
     gamehandler.cpp \
     #../Hough-Circle-Detector/src/hcd.cpp \
+    point.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -50,6 +53,7 @@ HEADERS  += mainwindow.h \
     ../sysroot/usr/include/opencv2/imgproc/imgproc.hpp \
     ../sysroot/usr/include/opencv2/videoio/videoio.hpp \
     ../sysroot/usr/include/opencv2/core/core.hpp \
+    point.h
 
 
 FORMS    += mainwindow.ui

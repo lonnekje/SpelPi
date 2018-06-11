@@ -51,23 +51,29 @@ MainWindow::MainWindow(QWidget *parent) :
     Cambut->move(50,200);
     connect(Cambut, SIGNAL(clicked(bool)), this, SLOT(CamSlot()));
 
-    QPushButton *Servobut = new QPushButton("Servo", this);
-    Servobut->move(250,200);
-    connect(Servobut, SIGNAL(clicked(bool)), this, SLOT(ServoSlot()));
+    QPushButton *Movebut1 = new QPushButton("Move1", this);
+    Movebut1->move(250,200);
+    connect(Movebut1, SIGNAL(clicked(bool)), this, SLOT(Move1Slot()));
 
-    QPushButton *Servo2but = new QPushButton("Servo", this);
-    Servo2but->move(50,240);
-    connect(Servo2but, SIGNAL(clicked(bool)), this, SLOT(Servo2Slot()));
+    QPushButton *Movebut2 = new QPushButton("Move2", this);
+    Movebut2->move(50,240);
+    connect(Movebut2, SIGNAL(clicked(bool)), this, SLOT(Move2Slot()));
 
     QPushButton *Homebut = new QPushButton("Home", this);
     Homebut->move(250,240);
     connect(Homebut, SIGNAL(clicked(bool)), this, SLOT(HomeSlot()));
+
+
+
 
     //setup threads
 
     MotorThread = new MotorController();
     CamThread = new CameraHandler();
     GameThread = new GameHandler();
+
+    GameHandler c;
+    c.doConnect();
 
     connect(CamThread, SIGNAL(valueChanged(int, QImage)), this, SLOT(onValueChanged(int, QImage)));
 
@@ -131,10 +137,23 @@ void MainWindow::Servo2Slot(){
     MotorThread->Servo(hoog=80);
 }*/
 
+void MainWindow::Move1Slot(){
+    cout << "Move1"<< endl;
+    MotorThread->Init();
+    MotorThread->Move(x=4, y=2);
+}
+
+void MainWindow::Move2Slot(){
+    cout << "Homemove2"<< endl;
+    MotorThread->Init();
+    MotorThread->Move(x=10, y=6);
+}
+
+
 void MainWindow::HomeSlot(){
     cout << "Home"<< endl;
     MotorThread->Init();
-    MotorThread->Home();
+    MotorThread->Move(x=0,y=0);
 }
 
 void MainWindow::onValueChanged(int count, QImage img){

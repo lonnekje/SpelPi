@@ -57,8 +57,9 @@ private slots:
     void CamSlot();
     void highSlot();
     void lowSlot();
-    void ServoSlot();
-    void Servo2Slot();
+    void Move1Slot();
+    void Move2Slot();
+
     void HomeSlot();
 
     //void showImg(QImage editmejn);
@@ -70,6 +71,7 @@ private:
     int pin;
     bool succes;
     int hoog;
+    int x,y;
     //QPixmap img;
 };
 
