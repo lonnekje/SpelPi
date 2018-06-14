@@ -99,6 +99,8 @@ void MotorController::Init(){
 
 void MotorController::Move(int x, int y){
 
+    MotorController::Init();
+
 cout<<"Start move" << x << y <<endl;
 
     tempx = x - lastx;
@@ -112,10 +114,11 @@ cout<<"Temp xy" << tempx << tempy <<endl;
     }
     else{ gpioWrite(DIR2, PI_HIGH);}
 
-    tempx = tempx/2;
+    tempx = tempx*50000;
+
 
     gpioPWM(STEP2, 50);
-    sleep(tempx);
+    usleep(tempx);
     gpioPWM(STEP2, 0);
 
     if(tempy<0){
@@ -124,10 +127,12 @@ cout<<"Temp xy" << tempx << tempy <<endl;
     }
     else{ gpioWrite(DIR1, PI_HIGH);}
 
-    tempy = tempy/2;
+    tempy = tempy*50000;
+
+    cout<<"end value xy" << tempx << ", "<< tempy <<endl;
 
     gpioPWM(STEP1, 50);
-    sleep(tempy);
+    usleep(tempy);
     gpioPWM(STEP1, 0);
 
 
@@ -148,6 +153,7 @@ void MotorController::run(bool dir){
         gpioWrite(DIR2, PI_HIGH);
         cout<<"writing DIR2 low"<<endl;
     }
+    cout << " at tick: "<< gpioTick() << endl;
 
     gpioPWM(STEP2, 50);
 
@@ -170,6 +176,7 @@ void MotorController::runup(bool dir){
         cout<<"writing 20 low"<<endl;
     }
 
+    cout << " at tick: "<< gpioTick() << endl;
     gpioPWM(STEP1, 50);
 
 }

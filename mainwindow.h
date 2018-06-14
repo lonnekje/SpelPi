@@ -8,10 +8,16 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "gpioclass.h"
 #include "motorcontroller.h"
 #include "gamehandler.h"
 #include "camerahandler.h"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QUrlQuery>
+#include <QUrl>
+#include <QNetworkReply>
+#include <QTimer>
 
 
 
@@ -39,6 +45,9 @@ public:
     CameraHandler *CamThread;
     GameHandler *GameThread;
 
+    int fieldvalue;
+    int pawnvalue;
+
 
 
 
@@ -48,6 +57,8 @@ public slots:
 
 private slots:
     void on_pushButton_clicked();
+    void onResult(QNetworkReply*);
+    void onGetData();
 
     //void on_pushButton_2_clicked();
     void StartSlot();
@@ -65,6 +76,8 @@ private slots:
     //void showImg(QImage editmejn);
 
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     bool dir;
@@ -72,6 +85,17 @@ private:
     bool succes;
     int hoog;
     int x,y;
+
+    QString pawn;
+    QChar ffield;
+    QChar sfield;
+    QString field;
+
+    int lastpawn;
+    int lastfield;
+    int pawnv = 0;
+    int fieldv = 0;
+
     //QPixmap img;
 };
 

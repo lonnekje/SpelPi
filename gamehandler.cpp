@@ -5,41 +5,36 @@ GameHandler::GameHandler(QObject *parent) :QObject(parent)
 
 }
 
-void GameHandler::doConnect()
+void GameHandler::MovePawn(int pawn, int field)
 {
-    socket = new QTcpSocket(this);
-    socket->connectToHost("localhost", 8080);
-    //socket->c
 
-    if(socket->waitForConnected(5000))
-    {
-        cout << "connected" << endl;
+    //move to old pawn pos
+    MotorController mc;
+    mc.Move(PawnPos[0][pawn], PawnPos[1][pawn]);
 
-        socket->write("GET /api/users\r\n\r\n");
-        socket->waitForBytesWritten(1000);
-        socket->waitForReadyRead(3000);
+    //move servo
 
 
+    //lookup coordinate
+    xpos = table[0][field];
+    ypos = table[1][field];
 
-        cout << "Total bytes: " << socket->bytesAvailable() << endl;
-        qDebug() << socket->readAll();
+    cout << "coort: " << xpos << ","<< ypos << endl;
+    cout << "pawn: " << pawn << endl;
+    cout << "field: " << field << endl;
 
-        while(socket->bytesAvailable()){
-            buffer.append(socket->readAll());
-            int packetSize =
-        }
+    //move to new pawn position
+
+    mc.Move(xpos, ypos);
+
+    //write down new location
+    PawnPos[0][pawn] = xpos;
+    PawnPos[1][pawn] = ypos;
+
+    cout << "xpawn: " << PawnPos[0][pawn] << endl;
+    cout << "ypawn: " << PawnPos[1][pawn] << endl;
 
 
 
-
-
-
-        socket->close();
-
-    }
-    else
-    {
-        cout << "Not connected" << endl;
-    }
 
 }

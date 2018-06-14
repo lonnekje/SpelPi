@@ -63,6 +63,16 @@ MainWindow::MainWindow(QWidget *parent) :
     Homebut->move(250,240);
     connect(Homebut, SIGNAL(clicked(bool)), this, SLOT(HomeSlot()));
 
+    //networkManager = new QNetworkAccessManager();
+
+    QTimer *timer = new QTimer(this);
+
+    connect(timer, SIGNAL(timeout()),this, SLOT(onGetData()));
+    timer->start(5000);
+
+
+
+
 
 
 
@@ -72,12 +82,70 @@ MainWindow::MainWindow(QWidget *parent) :
     CamThread = new CameraHandler();
     GameThread = new GameHandler();
 
-    GameHandler c;
-    c.doConnect();
+   /* GameHandler c;
+    c.doConnect();*/
 
     connect(CamThread, SIGNAL(valueChanged(int, QImage)), this, SLOT(onValueChanged(int, QImage)));
 
 
+}
+
+void MainWindow::onGetData(){
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
+    networkManager->get(QNetworkRequest(QUrl("http://192.168.129.111:8080/api/users")));
+}
+
+void MainWindow::onResult(QNetworkReply *reply){
+    if(!reply->error()){
+
+        QString data = (QString) reply->readAll();\
+
+        qDebug() << data;
+
+        pawn = data[5];
+        field.remove(0, 2);
+
+        ffield = data[18];
+        sfield = data[19];
+
+        qDebug() << "Ffield: " << ffield;
+        qDebug() << "SField: " << sfield;
+        qDebug() << fieldvalue;
+
+
+        field.append(ffield);
+        field.append(sfield);
+
+
+        fieldvalue = field.toInt();
+        pawnvalue = pawn.toInt();
+
+
+        qDebug() << "Verkregen waardes";
+        qDebug() << pawnvalue;
+        qDebug() << fieldvalue;
+
+
+
+        if(fieldvalue != lastfield){
+        GameThread->MovePawn(pawnvalue, fieldvalue);
+        }
+
+        lastfield=fieldvalue;
+        ffield = 0;
+
+
+
+       /* QJsonDocument document = QJsonDocument(reply->readAll());
+        QJsonObject root = document.object();
+
+        qDebug() << root;*/
+
+    }
+
+    reply->deleteLater();
 }
 
 void MainWindow::StartSlot(){
@@ -138,22 +206,24 @@ void MainWindow::Servo2Slot(){
 }*/
 
 void MainWindow::Move1Slot(){
-    cout << "Move1"<< endl;
+    cout << "X&Y"<< endl;
     MotorThread->Init();
-    MotorThread->Move(x=4, y=2);
+    MotorThread->Move(x=34, y=20);
 }
 
 void MainWindow::Move2Slot(){
-    cout << "Homemove2"<< endl;
+    cout << "Y"<< endl;
     MotorThread->Init();
-    MotorThread->Move(x=10, y=6);
+    MotorThread->Move(x=37, y=26);
 }
 
 
 void MainWindow::HomeSlot(){
-    cout << "Home"<< endl;
     MotorThread->Init();
-    MotorThread->Move(x=0,y=0);
+    MotorThread->Move(x=0, y=0);
+
+   /* fieldv= fieldv+2;
+    GameThread->MovePawn(pawnv, fieldv);*/
 }
 
 void MainWindow::onValueChanged(int count, QImage img){
@@ -174,3 +244,8 @@ void MainWindow::on_pushButton_clicked()
 }
 
 
+
+void MainWindow::on_pushButton_2_clicked()
+{
+
+}

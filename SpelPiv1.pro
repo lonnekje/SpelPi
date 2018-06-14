@@ -4,8 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT       += network
+QT       += core gui network
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -35,16 +35,13 @@ LIBS += -L/home/lonneke/sysroot/usr/lib -lwiringPi \
 SOURCES += main.cpp\
         mainwindow.cpp \
     motorcontroller.cpp \
-    gpioclass.cpp \
     camerahandler.cpp \
-    gamehandler.cpp \
+    gamehandler.cpp
     #../Hough-Circle-Detector/src/hcd.cpp \
-    point.cpp
 
 
 HEADERS  += mainwindow.h \
     motorcontroller.h \
-    gpioclass.h \
     camerahandler.h \
     gamehandler.h \
     #../Hough-Circle-Detector/src/hcd.h \
@@ -52,8 +49,7 @@ HEADERS  += mainwindow.h \
     ../sysroot/usr/include/opencv2/highgui/highgui.hpp \
     ../sysroot/usr/include/opencv2/imgproc/imgproc.hpp \
     ../sysroot/usr/include/opencv2/videoio/videoio.hpp \
-    ../sysroot/usr/include/opencv2/core/core.hpp \
-    point.h
+    ../sysroot/usr/include/opencv2/core/core.hpp
 
 
 FORMS    += mainwindow.ui

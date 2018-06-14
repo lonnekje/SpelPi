@@ -4,9 +4,7 @@
 #include <QMainWindow>
 #include <QWidget>
 #include "mainwindow.h"
-#include "point.h"
-
-
+#include <QThread>
 #include <pigpio.h>
 
 #define SERVO  5
@@ -63,6 +61,7 @@ private:
     int tempx, tempy;
     int lastx = 0;
     int lasty = 0;
+
 
 
 
