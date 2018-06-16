@@ -91,10 +91,11 @@ private:
     QChar sfield;
     QString field;
 
-    int lastpawn;
-    int lastfield;
     int pawnv = 0;
     int fieldv = 0;
+    static int tempfield;
+    static int aantal;
+    static int c;
 
     //QPixmap img;
 };

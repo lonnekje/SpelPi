@@ -97,9 +97,33 @@ void MotorController::Init(){
     }
 }
 
+int MotorController::count = 0;
+bool MotorController::firstTime = true;
+int MotorController::lastx = 0;
+int MotorController::lasty = 0;
+
+void MotorController::Servoup(){
+    cout << "Servo up" << endl;
+      gpioServo(SERVO, 1000);
+
+}
+
+void MotorController::Servodown(){
+    cout << "Servo down" << endl;
+    gpioServo(SERVO, 2000);
+
+}
+
+
+
+
+
 void MotorController::Move(int x, int y){
 
+    cout<<"count moves: " << MotorController::count <<endl;
+    MotorController::count++;
     MotorController::Init();
+
 
 cout<<"Start move" << x << y <<endl;
 
@@ -108,18 +132,13 @@ cout<<"Start move" << x << y <<endl;
 
 cout<<"Temp xy" << tempx << tempy <<endl;
 
+
+
     if(tempx<0){
-        gpioWrite(DIR2, PI_LOW);
+        gpioWrite(DIR2, PI_HIGH);
         tempx = tempx * -1;
     }
-    else{ gpioWrite(DIR2, PI_HIGH);}
-
-    tempx = tempx*50000;
-
-
-    gpioPWM(STEP2, 50);
-    usleep(tempx);
-    gpioPWM(STEP2, 0);
+    else{ gpioWrite(DIR2, PI_LOW);}
 
     if(tempy<0){
         gpioWrite(DIR1, PI_LOW);
@@ -127,15 +146,26 @@ cout<<"Temp xy" << tempx << tempy <<endl;
     }
     else{ gpioWrite(DIR1, PI_HIGH);}
 
-    tempy = tempy*50000;
-
+    tempx = tempx*150000;
+    tempy = tempy*150000;
     cout<<"end value xy" << tempx << ", "<< tempy <<endl;
 
-    gpioPWM(STEP1, 50);
-    usleep(tempy);
-    gpioPWM(STEP1, 0);
 
-
+    if(tempy==0){
+        gpioPWM(STEP2, 50);
+        usleep(tempx);
+        gpioPWM(STEP2, 0);
+    }else if(tempx==0){
+        gpioPWM(STEP1, 50);
+        usleep(tempy);
+        gpioPWM(STEP1, 0);
+    }else{
+        gpioPWM(STEP1, 50);
+        gpioPWM(STEP2, 50);
+        usleep(tempy);
+        gpioPWM(STEP1, 0);
+        gpioPWM(STEP2, 0);
+    }
 
     lastx = x;
     lasty = y;

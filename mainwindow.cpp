@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer *timer = new QTimer(this);
 
     connect(timer, SIGNAL(timeout()),this, SLOT(onGetData()));
-    timer->start(5000);
+    timer->start(500);
 
 
 
@@ -97,12 +97,16 @@ void MainWindow::onGetData(){
     networkManager->get(QNetworkRequest(QUrl("http://192.168.129.111:8080/api/users")));
 }
 
+int MainWindow::tempfield = 0;
+int MainWindow::aantal =0;
+int MainWindow::c = 0;
+
 void MainWindow::onResult(QNetworkReply *reply){
     if(!reply->error()){
 
         QString data = (QString) reply->readAll();\
 
-        qDebug() << data;
+        //qDebug() << data;
 
         pawn = data[5];
         field.remove(0, 2);
@@ -110,38 +114,51 @@ void MainWindow::onResult(QNetworkReply *reply){
         ffield = data[18];
         sfield = data[19];
 
-        qDebug() << "Ffield: " << ffield;
+        /*qDebug() << "Ffield: " << ffield;
         qDebug() << "SField: " << sfield;
-        qDebug() << fieldvalue;
-
+        qDebug() << fieldvalue;*/
 
         field.append(ffield);
         field.append(sfield);
-
 
         fieldvalue = field.toInt();
         pawnvalue = pawn.toInt();
 
 
-        qDebug() << "Verkregen waardes";
-        qDebug() << pawnvalue;
-        qDebug() << fieldvalue;
+        qDebug() << "Verkregen waardes" << fieldvalue << "c: "<<c;
 
 
 
-        if(fieldvalue != lastfield){
-        GameThread->MovePawn(pawnvalue, fieldvalue);
+        switch(c){
+        case 0://Wachten op ander resultaat
+            if(fieldvalue != tempfield){
+                c = 1;
+            }
+            break;
+
+        case 1://Check voor  verandering
+            if(tempfield == fieldvalue){
+                aantal++;
+                if(aantal == 3){
+                    c=2;
+                }
+            }else{
+                aantal = 0;
+            }
+
+            break;
+
+        case 2://stuur veldwaarde door
+            GameThread->MovePawn(pawnvalue,fieldvalue);
+            c=0;
+            break;
+
+        default: break;
         }
 
-        lastfield=fieldvalue;
+
+        tempfield=fieldvalue;
         ffield = 0;
-
-
-
-       /* QJsonDocument document = QJsonDocument(reply->readAll());
-        QJsonObject root = document.object();
-
-        qDebug() << root;*/
 
     }
 
@@ -208,13 +225,15 @@ void MainWindow::Servo2Slot(){
 void MainWindow::Move1Slot(){
     cout << "X&Y"<< endl;
     MotorThread->Init();
-    MotorThread->Move(x=34, y=20);
+    //MotorThread->Move(x=34, y=20);
+    MotorThread->Servodown();
 }
 
 void MainWindow::Move2Slot(){
     cout << "Y"<< endl;
     MotorThread->Init();
-    MotorThread->Move(x=37, y=26);
+    //MotorThread->Move(x=37, y=26);
+    MotorThread->Servoup();
 }
 
 

@@ -39,7 +39,8 @@ public:
     static void myInterrupt(int gpio, int level, uint32_t tick);
     void afs();
     void Init();
-    void Servo(int hoog);
+    void Servoup();
+    void Servodown();
     void HomeX();
     void HomeY();
     void Home();
@@ -48,23 +49,26 @@ public:
 
     bool Switch;
     bool stopmotor=false;
+    static int count;
+    static bool firstTime;
+    static int lastx;
+    static int lasty;
 
 private:
    // bool switch1 = true;
+
     int i;
     int x;
     int y;
     int z;
     int MaxStepX = 200;
     int MaxStepY = 200;
-    bool firstTime = true;
+
     int tempx, tempy;
-    int lastx = 0;
-    int lasty = 0;
-
-
 
 
 };
+
+
 
 #endif // MOTORCONTROLLER_H
