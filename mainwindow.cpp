@@ -81,6 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
     MotorThread = new MotorController();
     CamThread = new CameraHandler();
     GameThread = new GameHandler();
+    //QNetworkAccessManager *
+    networkManager = new QNetworkAccessManager();
 
    /* GameHandler c;
     c.doConnect();*/
@@ -91,7 +93,7 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::onGetData(){
-    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+    //QNetworkAccessManager *networkManager; //= new QNetworkAccessManager();
 
     connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
     networkManager->get(QNetworkRequest(QUrl("http://192.168.129.111:8080/api/users")));
@@ -101,12 +103,13 @@ int MainWindow::tempfield = 0;
 int MainWindow::aantal =0;
 int MainWindow::c = 0;
 
+
 void MainWindow::onResult(QNetworkReply *reply){
     if(!reply->error()){
 
         QString data = (QString) reply->readAll();\
 
-        //qDebug() << data;
+        //qDebug() << "data: "<< data;
 
         pawn = data[5];
         field.remove(0, 2);
@@ -114,51 +117,58 @@ void MainWindow::onResult(QNetworkReply *reply){
         ffield = data[18];
         sfield = data[19];
 
-        /*qDebug() << "Ffield: " << ffield;
-        qDebug() << "SField: " << sfield;
-        qDebug() << fieldvalue;*/
-
         field.append(ffield);
         field.append(sfield);
 
         fieldvalue = field.toInt();
+
+
         pawnvalue = pawn.toInt();
 
 
-        qDebug() << "Verkregen waardes" << fieldvalue << "c: "<<c;
-
-
-
-        switch(c){
-        case 0://Wachten op ander resultaat
-            if(fieldvalue != tempfield){
-                c = 1;
+        if(field == "Na"){
+            qDebug() << "Move to start" ;
+              GameThread->MovePawn(pawnvalue,11);
             }
-            break;
 
-        case 1://Check voor  verandering
-            if(tempfield == fieldvalue){
-                aantal++;
-                if(aantal == 3){
-                    c=2;
+        if(fieldvalue !=0){
+
+            qDebug() << "Verkregen waardes" << fieldvalue << "c: "<<c;
+
+
+            switch(c){
+            case 0://Wachten op ander resultaat
+                if(fieldvalue != tempfield){
+                    c = 1;
+
                 }
-            }else{
-                aantal = 0;
+                break;
+
+            case 1://Check voor  verandering
+                if(tempfield == fieldvalue){
+                    aantal++;
+                    if(aantal == 3){
+                        c=2;
+                        aantal = 0;
+                    }
+                }else{
+                    aantal = 0;
+                }
+
+                break;
+
+            case 2://stuur veldwaarde door
+                GameThread->MovePawn(pawnvalue,fieldvalue);
+                c=0;
+                break;
+
+            default: break;
             }
 
-            break;
 
-        case 2://stuur veldwaarde door
-            GameThread->MovePawn(pawnvalue,fieldvalue);
-            c=0;
-            break;
-
-        default: break;
+            tempfield=fieldvalue;
+            ffield = 0;
         }
-
-
-        tempfield=fieldvalue;
-        ffield = 0;
 
     }
 

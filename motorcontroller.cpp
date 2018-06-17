@@ -1,4 +1,8 @@
 #include "motorcontroller.h"
+int MotorController::count = 0;
+bool MotorController::firstTime = true;
+int MotorController::lastx = 0;
+int MotorController::lasty = 0;
 
 MotorController::MotorController(QWidget *parent) : QMainWindow(parent)
 {
@@ -97,11 +101,6 @@ void MotorController::Init(){
     }
 }
 
-int MotorController::count = 0;
-bool MotorController::firstTime = true;
-int MotorController::lastx = 0;
-int MotorController::lasty = 0;
-
 void MotorController::Servoup(){
     cout << "Servo up" << endl;
       gpioServo(SERVO, 1000);
@@ -111,28 +110,15 @@ void MotorController::Servoup(){
 void MotorController::Servodown(){
     cout << "Servo down" << endl;
     gpioServo(SERVO, 2000);
-
 }
-
-
-
-
 
 void MotorController::Move(int x, int y){
 
-    cout<<"count moves: " << MotorController::count <<endl;
     MotorController::count++;
     MotorController::Init();
 
-
-cout<<"Start move" << x << y <<endl;
-
     tempx = x - lastx;
     tempy = y - lasty;
-
-cout<<"Temp xy" << tempx << tempy <<endl;
-
-
 
     if(tempx<0){
         gpioWrite(DIR2, PI_HIGH);
@@ -148,8 +134,6 @@ cout<<"Temp xy" << tempx << tempy <<endl;
 
     tempx = tempx*150000;
     tempy = tempy*150000;
-    cout<<"end value xy" << tempx << ", "<< tempy <<endl;
-
 
     if(tempy==0){
         gpioPWM(STEP2, 50);
@@ -222,39 +206,16 @@ void MotorController::afs(){
 
 }
 
-/*void MotorController::Servo(int hoog){
-    cout << "Servo " << endl;
-    for(int i=0; i<1; i++){
-        gpioServo(SERVO, 500);
-        sleep(2);
-        gpioServo(SERVO, 1000);
-        sleep(2);
-
-    }
-    gpioServo(SERVO, 0);
-
-}
-*/
 void MotorController::Home(){
 
-    /*HomeX();
 
-
-    while(stopmotor ==false){
-
-    }
-    cout << "After while " << endl;
-    HomeY();*/
 }
 
 void MotorController::HomeX(){
     cout << "Going Home X " << endl;
     gpioWrite(DIR2, PI_LOW);
     gpioPWM(STEP2, 50);
-
-
 }
-
 
 void MotorController::HomeY(){
     cout << "Going Home Y" << endl;

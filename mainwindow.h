@@ -79,6 +79,7 @@ private slots:
     void on_pushButton_2_clicked();
 
 private:
+    QNetworkAccessManager *networkManager;
     Ui::MainWindow *ui;
     bool dir;
     int pin;

@@ -12,6 +12,8 @@ void GameHandler::MovePawn(int pawn, int field)
     MotorController mc;
     mc.Move(PawnPos[0][pawn], PawnPos[1][pawn]);
 
+    qDebug() << "Old pawn location: " << PawnPos[0][pawn];
+
     if(field <= 1 || field >=41){
     cout << "Error, wrong field value" << endl;
     }
@@ -31,7 +33,7 @@ void GameHandler::MovePawn(int pawn, int field)
 
     //move servo
     mc.Servoup();
-    usleep(200);
+    usleep(300);
 
     //Rangeer uit
     xpos = velden[oldfield].outx;
@@ -82,32 +84,5 @@ void GameHandler::MovePawn(int pawn, int field)
     PawnPos[2][pawn] = field;
 
     }
-
-/*
-    //lookup coordinate
-    if(xpos > 0 || xpos < 41){
-    xpos = velden[field].x;
-            //table[0][field];
-    }
-    if(ypos > 0 || ypos < 41){
-    ypos = velden[field].y;
-            //table[1][field];
-    }
-
-
-
-    //move to new pawn position
-    mc.Move(xpos, ypos);
-    mc.Servodown();
-
-    //write down new location
-    PawnPos[0][pawn] = xpos;
-    PawnPos[1][pawn] = ypos;
-
-
-    */
-
-
-
 
 }
