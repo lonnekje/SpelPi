@@ -19,7 +19,7 @@ void CameraHandler::FindCircle(){
     //cv::Mat mat(mejn.rows(), mejn.cols(), CV_8UC3, mejn.scanLine());
 
 
-  /*  mejn = mejn.convertToFormat(QImage::Format_Grayscale8);
+    mejn = mejn.convertToFormat(QImage::Format_Grayscale8);
 
     HoughCircleDetector hcd;
 

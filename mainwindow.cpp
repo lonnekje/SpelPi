@@ -109,7 +109,10 @@ void MainWindow::onResult(QNetworkReply *reply){
 
         QString data = (QString) reply->readAll();\
 
-        //qDebug() << "data: "<< data;
+        if(data.length()!=0){
+            qDebug() << "data: "<< data;
+
+    }
 
         pawn = data[5];
         field.remove(0, 2);
@@ -127,8 +130,9 @@ void MainWindow::onResult(QNetworkReply *reply){
 
 
         if(field == "Na"){
+            fieldvalue=11;
             qDebug() << "Move to start" ;
-              GameThread->MovePawn(pawnvalue,11);
+              //GameThread->MovePawn(pawnvalue,11);
             }
 
         if(fieldvalue !=0){
@@ -233,17 +237,17 @@ void MainWindow::Servo2Slot(){
 }*/
 
 void MainWindow::Move1Slot(){
-    cout << "X&Y"<< endl;
+    //cout << "X&Y"<< endl;
     MotorThread->Init();
-    //MotorThread->Move(x=34, y=20);
-    MotorThread->Servodown();
+    MotorThread->Move(x=34, y=6);
+    //MotorThread->Servodown();
 }
 
 void MainWindow::Move2Slot(){
-    cout << "Y"<< endl;
+   //cout << "Y"<< endl;
     MotorThread->Init();
-    //MotorThread->Move(x=37, y=26);
-    MotorThread->Servoup();
+    MotorThread->Move(x=25, y=5);
+   // MotorThread->Servoup();
 }
 
 

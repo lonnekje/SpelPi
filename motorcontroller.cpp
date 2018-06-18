@@ -95,9 +95,6 @@ void MotorController::Init(){
 
 
         firstTime = false;
-        //bool MotorController::stopmotor = false;
-      /*  Point last;
-        last.setLastLocation(last.lastx=0, last.lasty=0);*/
     }
 }
 
@@ -117,6 +114,8 @@ void MotorController::Move(int x, int y){
     MotorController::count++;
     MotorController::Init();
 
+    cout<< "Last x, y: " << lastx << ", " << lasty << endl;
+
     tempx = x - lastx;
     tempy = y - lasty;
 
@@ -132,8 +131,12 @@ void MotorController::Move(int x, int y){
     }
     else{ gpioWrite(DIR1, PI_HIGH);}
 
+    cout<< "Temp x, y: " << tempx << ", " << tempy << endl;
+
+
     tempx = tempx*150000;
     tempy = tempy*150000;
+
 
     if(tempy==0){
         gpioPWM(STEP2, 50);
@@ -143,12 +146,23 @@ void MotorController::Move(int x, int y){
         gpioPWM(STEP1, 50);
         usleep(tempy);
         gpioPWM(STEP1, 0);
-    }else{
+    }else if(tempx == tempy){
         gpioPWM(STEP1, 50);
         gpioPWM(STEP2, 50);
         usleep(tempy);
         gpioPWM(STEP1, 0);
         gpioPWM(STEP2, 0);
+    }
+    else{
+
+        gpioPWM(STEP2, 50);
+        usleep(tempx);
+        gpioPWM(STEP2, 0);
+
+        gpioPWM(STEP1, 50);
+        usleep(tempy);
+        gpioPWM(STEP1, 0);
+
     }
 
     lastx = x;
